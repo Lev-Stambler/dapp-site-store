@@ -13,7 +13,7 @@
     e.preventDefault();
     deleteSite();
   }}>
-  <h2>Upload a file</h2>
+  <h2>Delete a site</h2>
   <FormGroup>
     <Label for="#nameinp">
       Please select the name that you would like to delete

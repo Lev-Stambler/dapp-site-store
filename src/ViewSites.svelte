@@ -5,7 +5,7 @@
   export let siteStore, account;
 
   async function getCID() {
-    return await siteStore.methods.ipfsDNS(name).call();
+    return (await siteStore.methods.ipfsDNS(name).call()).ipfsCID;
   }
 
   function getUrlFromCID(cid: string) {
