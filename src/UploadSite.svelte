@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { prevent_default } from "svelte/internal";
   import { Form, FormGroup, Input, Label } from "sveltestrap";
   let files;
   let name: string;
@@ -8,22 +7,29 @@
 
   async function uploadToIpfs() {
     const file = files[0];
-    const fileDetails = {
-      path: file.name,
-      content: file,
-    };
+    console.log(files)
+    const filesDetails = Array.from(files).map((file) => {
+      return {
+        path: file.webkitRelativePath.substring(file.webkitRelativePath.indexOf("/") + 1),
+        content: file,
+      };
+    });
+    console.log(filesDetails)
     const options = {
-      wrapWithDirectory: false,
+      wrapWithDirectory: true,
       progress: (prog) => console.log(`received: ${prog}`),
     };
 
-    const added = await ipfs.add(fileDetails, options);
-    console.log(added);
-    ipfsCID = added.cid.string;
+    const addedGen = ipfs.addAll(filesDetails, options);
+    for await (const added of addedGen) {
+      if (added.path === "") {
+        ipfsCID = added.cid.string;
+      }
+    }
+    console.log(ipfsCID)
   }
 
   async function addToSiteStore() {
-    console.log(siteStore);
     await siteStore.methods.addSiteToDNS(name, ipfsCID).send({ from: account });
   }
 
@@ -43,7 +49,20 @@
     <Label for="#fileinp">
       Please select the file that you would like to upload
     </Label>
-    <Input id="fileinp" type="file" bind:files />
+    <!-- <input type="file" id="fileinp" bind:files class="form-control-file"> -->
+    <input
+      type="file"
+      id="fileinp"
+      webkitdirectory="true"
+      directory="true"
+      multiple
+      bind:files
+      on:change={async (e) => {
+        // files = await getDroppedOrSelectedFiles(e);
+        // files=e
+      }}
+      class="form-control-file" />
+    <!-- <Input id="fileinp" type="file" bind:files /> -->
   </FormGroup>
   <FormGroup>
     <Label for="#nameinp">

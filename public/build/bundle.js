@@ -159,13 +159,6 @@ var app = (function () {
         node.addEventListener(event, handler, options);
         return () => node.removeEventListener(event, handler, options);
     }
-    function prevent_default(fn) {
-        return function (event) {
-            event.preventDefault();
-            // @ts-ignore
-            return fn.call(this, event);
-        };
-    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -12398,7 +12391,7 @@ var app = (function () {
     const { console: console_1$1 } = globals;
     const file$f = "src/UploadSite.svelte";
 
-    // (53:4) <Label for="#fileinp">
+    // (77:4) <Label for="#fileinp">
     function create_default_slot_5$1(ctx) {
     	let t;
 
@@ -12418,20 +12411,21 @@ var app = (function () {
     		block,
     		id: create_default_slot_5$1.name,
     		type: "slot",
-    		source: "(53:4) <Label for=\\\"#fileinp\\\">",
+    		source: "(77:4) <Label for=\\\"#fileinp\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (52:2) <FormGroup>
+    // (76:2) <FormGroup>
     function create_default_slot_4$1(ctx) {
     	let label;
     	let t;
     	let input;
-    	let updating_files;
     	let current;
+    	let mounted;
+    	let dispose;
 
     	label = new Label({
     			props: {
@@ -12442,64 +12436,58 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	function input_files_binding(value) {
-    		/*input_files_binding*/ ctx[7].call(null, value);
-    	}
-
-    	let input_props = { id: "fileinp", type: "file" };
-
-    	if (/*files*/ ctx[0] !== void 0) {
-    		input_props.files = /*files*/ ctx[0];
-    	}
-
-    	input = new Input({ props: input_props, $$inline: true });
-    	binding_callbacks.push(() => bind(input, "files", input_files_binding));
-
     	const block = {
     		c: function create() {
     			create_component(label.$$.fragment);
     			t = space();
-    			create_component(input.$$.fragment);
+    			input = element("input");
+    			attr_dev(input, "type", "file");
+    			attr_dev(input, "id", "fileinp");
+    			attr_dev(input, "webkitdirectory", "true");
+    			attr_dev(input, "directory", "true");
+    			input.multiple = true;
+    			attr_dev(input, "class", "form-control-file");
+    			add_location(input, file$f, 80, 4, 3466);
     		},
     		m: function mount(target, anchor) {
     			mount_component(label, target, anchor);
     			insert_dev(target, t, anchor);
-    			mount_component(input, target, anchor);
+    			insert_dev(target, input, anchor);
     			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen_dev(input, "change", /*input_change_handler*/ ctx[7]),
+    					listen_dev(input, "change", change_handler, false, false, false)
+    				];
+
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, dirty) {
     			const label_changes = {};
 
-    			if (dirty & /*$$scope*/ 8192) {
+    			if (dirty & /*$$scope*/ 16384) {
     				label_changes.$$scope = { dirty, ctx };
     			}
 
     			label.$set(label_changes);
-    			const input_changes = {};
-
-    			if (!updating_files && dirty & /*files*/ 1) {
-    				updating_files = true;
-    				input_changes.files = /*files*/ ctx[0];
-    				add_flush_callback(() => updating_files = false);
-    			}
-
-    			input.$set(input_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in(label.$$.fragment, local);
-    			transition_in(input.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(label.$$.fragment, local);
-    			transition_out(input.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			destroy_component(label, detaching);
     			if (detaching) detach_dev(t);
-    			destroy_component(input, detaching);
+    			if (detaching) detach_dev(input);
+    			mounted = false;
+    			run_all(dispose);
     		}
     	};
 
@@ -12507,14 +12495,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4$1.name,
     		type: "slot",
-    		source: "(52:2) <FormGroup>",
+    		source: "(76:2) <FormGroup>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (59:4) <Label for="#nameinp">
+    // (96:4) <Label for="#nameinp">
     function create_default_slot_3$1(ctx) {
     	let t;
 
@@ -12534,14 +12522,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3$1.name,
     		type: "slot",
-    		source: "(59:4) <Label for=\\\"#nameinp\\\">",
+    		source: "(96:4) <Label for=\\\"#nameinp\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (58:2) <FormGroup>
+    // (95:2) <FormGroup>
     function create_default_slot_2$1(ctx) {
     	let label;
     	let t;
@@ -12586,7 +12574,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const label_changes = {};
 
-    			if (dirty & /*$$scope*/ 8192) {
+    			if (dirty & /*$$scope*/ 16384) {
     				label_changes.$$scope = { dirty, ctx };
     			}
 
@@ -12623,14 +12611,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$1.name,
     		type: "slot",
-    		source: "(58:2) <FormGroup>",
+    		source: "(95:2) <FormGroup>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (64:2) <FormGroup>
+    // (101:2) <FormGroup>
     function create_default_slot_1$1(ctx) {
     	let input;
     	let current;
@@ -12671,14 +12659,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$1.name,
     		type: "slot",
-    		source: "(64:2) <FormGroup>",
+    		source: "(101:2) <FormGroup>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (46:0) <Form   on:submit={(e) => {     e.preventDefault();     upload();   }}>
+    // (70:0) <Form   on:submit={(e) => {     e.preventDefault();     upload();   }}>
     function create_default_slot$2(ctx) {
     	let h2;
     	let t1;
@@ -12723,7 +12711,7 @@ var app = (function () {
     			create_component(formgroup1.$$.fragment);
     			t3 = space();
     			create_component(formgroup2.$$.fragment);
-    			add_location(h2, file$f, 50, 2, 1824);
+    			add_location(h2, file$f, 74, 2, 3243);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h2, anchor);
@@ -12738,21 +12726,21 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const formgroup0_changes = {};
 
-    			if (dirty & /*$$scope, files*/ 8193) {
+    			if (dirty & /*$$scope, files*/ 16385) {
     				formgroup0_changes.$$scope = { dirty, ctx };
     			}
 
     			formgroup0.$set(formgroup0_changes);
     			const formgroup1_changes = {};
 
-    			if (dirty & /*$$scope, name*/ 8194) {
+    			if (dirty & /*$$scope, name*/ 16386) {
     				formgroup1_changes.$$scope = { dirty, ctx };
     			}
 
     			formgroup1.$set(formgroup1_changes);
     			const formgroup2_changes = {};
 
-    			if (dirty & /*$$scope*/ 8192) {
+    			if (dirty & /*$$scope*/ 16384) {
     				formgroup2_changes.$$scope = { dirty, ctx };
     			}
 
@@ -12786,7 +12774,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$2.name,
     		type: "slot",
-    		source: "(46:0) <Form   on:submit={(e) => {     e.preventDefault();     upload();   }}>",
+    		source: "(70:0) <Form   on:submit={(e) => {     e.preventDefault();     upload();   }}>",
     		ctx
     	});
 
@@ -12821,7 +12809,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const form_changes = {};
 
-    			if (dirty & /*$$scope, name, files*/ 8195) {
+    			if (dirty & /*$$scope, name, files*/ 16387) {
     				form_changes.$$scope = { dirty, ctx };
     			}
 
@@ -12851,6 +12839,11 @@ var app = (function () {
 
     	return block;
     }
+
+    const change_handler = async e => {
+    	
+    }; // files = await getDroppedOrSelectedFiles(e);
+    // files=e
 
     function instance$g($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
@@ -12892,30 +12885,88 @@ var app = (function () {
     			});
     	};
 
+    	var __asyncValues = this && this.__asyncValues || function (o) {
+    		if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    		var m = o[Symbol.asyncIterator], i;
+
+    		return m
+    		? m.call(o)
+    		: (o = typeof __values === "function"
+    			? __values(o)
+    			: o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () {
+    				return this;
+    			}, i);
+
+    		function verb(n) {
+    			i[n] = o[n] && function (v) {
+    				return new Promise(function (resolve, reject) {
+    						(v = o[n](v), settle(resolve, reject, v.done, v.value));
+    					});
+    			};
+    		}
+
+    		function settle(resolve, reject, d, v) {
+    			Promise.resolve(v).then(
+    				function (v) {
+    					resolve({ value: v, done: d });
+    				},
+    				reject
+    			);
+    		}
+    	};
+
     	let files;
     	let name;
     	let { ipfsCID } = $$props;
     	let { ipfs } = $$props, { siteStore } = $$props, { account } = $$props;
 
     	function uploadToIpfs() {
+    		var e_1, _a;
+
     		return __awaiter(this, void 0, void 0, function* () {
     			const file = files[0];
-    			const fileDetails = { path: file.name, content: file };
+    			console.log(files);
+
+    			const filesDetails = Array.from(files).map(file => {
+    				return {
+    					path: file.webkitRelativePath.substring(file.webkitRelativePath.indexOf("/") + 1),
+    					content: file
+    				};
+    			});
+
+    			console.log(filesDetails);
 
     			const options = {
-    				wrapWithDirectory: false,
+    				wrapWithDirectory: true,
     				progress: prog => console.log(`received: ${prog}`)
     			};
 
-    			const added = yield ipfs.add(fileDetails, options);
-    			console.log(added);
-    			$$invalidate(3, ipfsCID = added.cid.string);
+    			const addedGen = ipfs.addAll(filesDetails, options);
+
+    			try {
+    				for (var addedGen_1 = __asyncValues(addedGen), addedGen_1_1; (addedGen_1_1 = yield addedGen_1.next(), !addedGen_1_1.done); ) {
+    					const added = addedGen_1_1.value;
+
+    					if (added.path === "") {
+    						$$invalidate(3, ipfsCID = added.cid.string);
+    					}
+    				}
+    			} catch(e_1_1) {
+    				e_1 = { error: e_1_1 };
+    			} finally {
+    				try {
+    					if (addedGen_1_1 && !addedGen_1_1.done && (_a = addedGen_1.return)) yield _a.call(addedGen_1);
+    				} finally {
+    					if (e_1) throw e_1.error;
+    				}
+    			}
+
+    			console.log(ipfsCID);
     		});
     	}
 
     	function addToSiteStore() {
     		return __awaiter(this, void 0, void 0, function* () {
-    			console.log(siteStore);
     			yield siteStore.methods.addSiteToDNS(name, ipfsCID).send({ from: account });
     		});
     	}
@@ -12933,8 +12984,8 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1$1.warn(`<UploadSite> was created with unknown prop '${key}'`);
     	});
 
-    	function input_files_binding(value) {
-    		files = value;
+    	function input_change_handler() {
+    		files = this.files;
     		$$invalidate(0, files);
     	}
 
@@ -12957,7 +13008,7 @@ var app = (function () {
 
     	$$self.$capture_state = () => ({
     		__awaiter,
-    		prevent_default,
+    		__asyncValues,
     		Form,
     		FormGroup,
     		Input,
@@ -12975,6 +13026,7 @@ var app = (function () {
 
     	$$self.$inject_state = $$props => {
     		if ("__awaiter" in $$props) __awaiter = $$props.__awaiter;
+    		if ("__asyncValues" in $$props) __asyncValues = $$props.__asyncValues;
     		if ("files" in $$props) $$invalidate(0, files = $$props.files);
     		if ("name" in $$props) $$invalidate(1, name = $$props.name);
     		if ("ipfsCID" in $$props) $$invalidate(3, ipfsCID = $$props.ipfsCID);
@@ -12995,7 +13047,7 @@ var app = (function () {
     		ipfs,
     		siteStore,
     		account,
-    		input_files_binding,
+    		input_change_handler,
     		input_value_binding,
     		submit_handler
     	];
